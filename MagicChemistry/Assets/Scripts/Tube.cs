@@ -22,20 +22,23 @@ public class Tube : AbstractTube {
             transform.position = new Vector3(mousePos.x, mousePos.y, 0);
         }
 
-        // Place the tube
-        if (Input.GetMouseButtonUp(0) && !placed)
+        if (Input.GetMouseButtonUp(0))
         {
-            placed = true;
-            SnapToClosestTile();
-        }
-
-        // Rotate the tube
-        if (Input.GetMouseButtonUp(0) && placed)
-        {
-            if (MouseOnMe())
+            
+            if (!placed)
             {
-                RotateCW();
+                // Place the tube
+                placed = true;
+                SnapToClosestTile();
+            } else
+            {
+                // Rotate the tube
+                if (MouseOnMe())
+                {
+                    RotateCW();
+                }
             }
+            
         }
 
         // Delete the tube
