@@ -10,8 +10,9 @@ public class TubeTemplate : TubeData {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButton(0) && !copyCreated && MouseOnMe())
+		if (Input.GetMouseButtonDown(0) && !copyCreated && MouseOnMe())
         {
+            Debug.Log("here?");
             Instantiate(tube, gameObject.transform.position, gameObject.transform.rotation);
             copyCreated = true;
         }
