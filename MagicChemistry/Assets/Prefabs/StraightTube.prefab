@@ -52,10 +52,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d0ff19c2dba934295609de157cd304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _North: 1
+  _South: 0
+  _West: 2
+  _East: 2
   tileSize: 1
-  direction: 0
-  inputs: 02000000
-  output: 0
 --- !u!212 &212795667445346308
 SpriteRenderer:
   m_ObjectHideFlags: 1
