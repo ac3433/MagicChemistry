@@ -56,8 +56,6 @@ public class Tube : AbstractTube {
         //TODO
     }
 
-    
-
     // Rotate sprite and directions 90 degrees clockwise
     void RotateCW()
     {
