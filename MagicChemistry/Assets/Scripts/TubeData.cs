@@ -13,11 +13,15 @@ public class TubeData : MonoBehaviour {
     [SerializeField]
     protected InputOutputState _East;
 
+    protected Camera _cam;
     protected TubeSideData[] _sides;
+
+    public float tileSize = 1;
 
 
     private void Start()
     {
+        _cam = Camera.main;
         _sides = new TubeSideData[4];
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
         _sides[1] = new TubeSideData() { Direction = DirectionState.South, State = _South };
@@ -63,11 +67,31 @@ public class TubeData : MonoBehaviour {
         return true;
     }
 
+    /// <summary>
+    // Check if mouse is hovering over the tube
+    /// </summary>
+    /// <returns></returns>
+    protected bool MouseOnMe()
+    {
+        float leftBound = transform.position.x - tileSize / 2f;
+        float rightBound = transform.position.x + tileSize / 2f;
+        float topBound = transform.position.y + tileSize / 2f;
+        float botBound = transform.position.y - tileSize / 2f;
+        Vector3 mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
+        if (mousePos.x >= leftBound && mousePos.x <= rightBound
+            && mousePos.y >= botBound && mousePos.y <= topBound)
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     #region Rotation
     public void RotateCounterClockWise()
     {
-        foreach(TubeSideData side in _sides)
+        transform.Rotate(Vector3.forward * -90);
+        foreach (TubeSideData side in _sides)
         {
             switch (side.Direction)
             {
@@ -90,6 +114,7 @@ public class TubeData : MonoBehaviour {
 
     public void RotateClockwise()
     {
+        transform.Rotate(Vector3.forward * 90);
         foreach (TubeSideData side in _sides)
         {
             switch (side.Direction)

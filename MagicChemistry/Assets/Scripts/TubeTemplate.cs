@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TubeTemplate : AbstractTube {
+public class TubeTemplate : TubeData {
 
     bool copyCreated = false;
 
