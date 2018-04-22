@@ -94,4 +94,9 @@ public class LevelManager : MonoBehaviour {
         _grid[x,y] = newTile;
     }
 
+    public GameObject[,] GetGrid()
+    {
+        return _grid;
+    }
+
 }

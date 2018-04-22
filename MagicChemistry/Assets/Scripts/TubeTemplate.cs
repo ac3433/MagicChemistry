@@ -7,13 +7,15 @@ public class TubeTemplate : TubeData {
     bool copyCreated = false;
 
     public GameObject tube;
+    public LevelManager manager;
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButtonDown(0) && !copyCreated && MouseOnMe())
         {
             Debug.Log("here?");
-            Instantiate(tube, gameObject.transform.position, gameObject.transform.rotation);
+            GameObject newTube = Instantiate(tube, gameObject.transform.position, gameObject.transform.rotation);
+            newTube.GetComponent<Tube>().SetManager(manager);
             copyCreated = true;
         }
         if (Input.GetMouseButtonUp(0) && copyCreated)
