@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Tube : TubeData {
 
-    protected bool _placed = true; // Tube starts out attached to the mouse cursor from dragging on the template.
+    protected bool _placed = false; // Tube starts out attached to the mouse cursor from dragging on the template.
 
-    private void Start() {
+    new void Start() {
+        base.Start();
         Vector3 mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(mousePos.x, mousePos.y, 0);
     }
@@ -21,7 +22,7 @@ public class Tube : TubeData {
             transform.position = new Vector3(mousePos.x, mousePos.y, 0);
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonUp(0))
         {
             
             if (!_placed)

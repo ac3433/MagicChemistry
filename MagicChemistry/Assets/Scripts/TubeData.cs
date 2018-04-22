@@ -22,7 +22,7 @@ public class TubeData : MonoBehaviour {
     protected byte xCord;
     protected byte yCord;
 
-    private void Start()
+    protected void Start()
     {
         _cam = Camera.main;
         _sides = new TubeSideData[4];
