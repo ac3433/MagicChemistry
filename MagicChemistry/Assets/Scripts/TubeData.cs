@@ -18,6 +18,9 @@ public class TubeData : MonoBehaviour {
 
     public float tileSize = 1;
 
+    protected float _value;
+    protected byte xCord;
+    protected byte yCord;
 
     private void Start()
     {
@@ -29,7 +32,7 @@ public class TubeData : MonoBehaviour {
         _sides[3] = new TubeSideData() { Direction = DirectionState.East, State = _East };
 
         if (CheckValidSides())
-            Debug.Log(string.Format("GameObject: %s\nTileData Script: Input Output State is not valid. Need at least 1 input and output"));
+            Debug.Log(string.Format("GameObject: {0}\nTileData Script: Input Output State is not valid. Need at least 1 input and output",gameObject.name));
     }
 
     public void AssignInputOutputStateSide(DirectionState dir, InputOutputState io)
@@ -66,6 +69,8 @@ public class TubeData : MonoBehaviour {
 
         return true;
     }
+
+    public void SetValue(float value) { _value = value; }
 
     /// <summary>
     // Check if mouse is hovering over the tube

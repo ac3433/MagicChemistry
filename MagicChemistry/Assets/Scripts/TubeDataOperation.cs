@@ -15,12 +15,13 @@ public class TubeDataOperation : TubeData
         _sides[3] = new TubeSideData() { Direction = DirectionState.East, State = _East };
 
         if (CheckValidSides(2))
-            Debug.Log(string.Format("GameObject: %s\nTileDataOperation Script: Input Output State is not valid. Need at least 2 input and output"));
+            Debug.Log(string.Format("GameObject: {0}\nTileDataOperation Script: Input Output State is not valid. Need at least 2 input and output",gameObject.name));
         if(_operation == OperationState.None)
-            Debug.Log(string.Format("GameObject: %s\nTileDataOperation Script: Missing operation."));
+            Debug.Log(string.Format("GameObject: {0}\nTileDataOperation Script: Missing operation.",gameObject.name));
 
     }
 
+    //terrible sorting method
     public int FindInputOperationValue()
     {
         int value = 0;
@@ -31,10 +32,30 @@ public class TubeDataOperation : TubeData
         {
             if(side.State == InputOutputState.Input)
             {
-
+                switch(side.Direction)
+                {
+                    case DirectionState.West:
+                        sortOrder[0] = side;
+                        break;
+                    case DirectionState.North:
+                        sortOrder[1] = side;
+                        break;
+                    case DirectionState.South:
+                        sortOrder[2] = side;
+                        break;
+                    case DirectionState.East:
+                        sortOrder[3] = side;
+                        break;
+                }
             }
         }
 
+        value = sortOrder[0].incomingValue;
+
+        for(int i = 1; i < sortOrder.Length; i++)
+        {
+            value = CalculateOperation(value, sortOrder[i].incomingValue);
+        }
 
         return value;
     }
