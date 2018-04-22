@@ -3,5 +3,5 @@ using System.Collections;
 
 public enum InputOutputState
 {
-    Input, Output, None
+    Input, Output, Both, None
 }
