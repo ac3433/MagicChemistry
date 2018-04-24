@@ -173,9 +173,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _North: 1
   _South: 0
-  _West: 2
-  _East: 2
+  _West: 3
+  _East: 3
   tileSize: 1
+  gridTile: {fileID: 0}
 --- !u!212 &212164455174305992
 SpriteRenderer:
   m_ObjectHideFlags: 1

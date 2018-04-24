@@ -172,8 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _North: 1
-  _South: 2
-  _West: 2
+  _South: 3
+  _West: 3
   _East: 0
   tileSize: 1
   gridTile: {fileID: 0}
