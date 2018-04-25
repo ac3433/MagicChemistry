@@ -31,7 +31,7 @@ public class TubeData : MonoBehaviour {
         _sides[2] = new TubeSideData() { Direction = DirectionState.West, State = _West };
         _sides[3] = new TubeSideData() { Direction = DirectionState.East, State = _East };
 
-        if (CheckValidSides())
+        if (!CheckValidSides())
             Debug.Log(string.Format("GameObject: {0}\nTileData Script: Input Output State is not valid. Need at least 1 input and output",gameObject.name));
     }
 
@@ -60,7 +60,6 @@ public class TubeData : MonoBehaviour {
             if (side.State == InputOutputState.Output)
                 output++;
         }
-
         //a minimum of 1 input of the side
         if (input < minimalInput)
             return false;
@@ -71,6 +70,10 @@ public class TubeData : MonoBehaviour {
     }
 
     public void SetValue(float value) { _value = value; }
+    public void SetCoordinates(byte x, byte y) {
+        xCord = x;
+        yCord = y;
+    }
 
     /// <summary>
     // Check if mouse is hovering over the tube
@@ -95,7 +98,7 @@ public class TubeData : MonoBehaviour {
     #region Rotation
     public void RotateCounterClockWise()
     {
-        transform.Rotate(Vector3.forward * -90);
+        transform.Rotate(Vector3.forward * 90);
         foreach (TubeSideData side in _sides)
         {
             switch (side.Direction)
@@ -119,7 +122,7 @@ public class TubeData : MonoBehaviour {
 
     public void RotateClockwise()
     {
-        transform.Rotate(Vector3.forward * 90);
+        transform.Rotate(Vector3.forward * -90);
         foreach (TubeSideData side in _sides)
         {
             switch (side.Direction)

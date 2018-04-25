@@ -67,6 +67,10 @@ public class LevelManager : MonoBehaviour {
 
     }
 
+    public void SetTile(int x, int y, GameObject go_in) {
+        _grid[x,y] = go_in;
+    }
+
     public void PlaceTile(int x, int y, int tileID)
     {
         if(x < 0 || x > _gridSize)
@@ -91,6 +95,11 @@ public class LevelManager : MonoBehaviour {
         newTile.transform.parent = _startPosition.transform;
         newTile.transform.position = new Vector3( _startPosition.transform.position.x + (TileSize() * x), _startPosition.transform.position.y - (TileSize() * y));
         newTile.name = string.Format("Tile {0}x{1}", x, y);
+        Tube newTube = newTile.GetComponent<Tube>();
+        if (newTube != null) {
+            newTube.SetManager(this);
+            newTube.SetCoordinates((byte)x,(byte)y);
+        }
         _grid[x,y] = newTile;
     }
 

@@ -5,10 +5,19 @@ using UnityEngine;
 public class Tube : TubeData {
 
     protected bool _placed = false; // Tube starts out attached to the mouse cursor from dragging on the template.
-    protected LevelManager manager;
+    public LevelManager manager;
 
     [SerializeField]
     protected GameObject gridTile; // Tile the tube is snapped to
+
+    [SerializeField] protected GameObject mask;
+    [SerializeField] protected float startDelaySec;
+    [SerializeField] protected float maxTimeTillFill;
+
+    protected float flowStartTime;
+    protected float maskScale;
+    protected bool flowing = false;
+    protected DirectionState inFlowSide;
 
     new void Start() {
         base.Start();
@@ -19,6 +28,7 @@ public class Tube : TubeData {
     public void SetManager(LevelManager manager)
     {
         this.manager = manager;
+        Debug.Log(manager);
     }
 
 	// Update is called once per frame
@@ -70,12 +80,11 @@ public class Tube : TubeData {
         }
 
         // Place in the center of the empty tile
-        Vector3 tileBounds = tile.GetComponent<SpriteRenderer>().bounds.size;
-        Vector3 tilePos = tile.transform.position;
+        Vector3 tileBounds = gridTile.GetComponent<SpriteRenderer>().bounds.size;
+        Vector3 tilePos = gridTile.transform.position;
         float offsetX = tileBounds.x / 2;
         float offsetY = tileBounds.y / 2;
         transform.position = new Vector3(tilePos.x + offsetX, tilePos.y - offsetY, tilePos.z);
-        gridTile = tile;
     }
 
     // Find the tile our mouse is over. If none is found, return null
@@ -87,7 +96,7 @@ public class Tube : TubeData {
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
-                Vector3 tileBounds = grid[i,j].GetComponent<SpriteRenderer>().bounds.size;
+                Vector3 tileBounds = grid[i,j].GetComponentInChildren<SpriteRenderer>().bounds.size;
                 Vector3 tilePos = grid[i, j].transform.position;
                 float xSize = tileBounds.x;
                 float ySize = tileBounds.y;
@@ -98,10 +107,93 @@ public class Tube : TubeData {
 
                 if (mousePos.x <= xMax && mousePos.x > xMin && mousePos.y <= yMax && mousePos.y > yMin)
                 {
+                    xCord = (byte)i;
+                    yCord = (byte)j;
+                    gridTile = grid[i,j];
+                    manager.SetTile(i,j,gameObject);
                     return grid[i, j];
                 }
             }
         }
         return null;
+    }
+
+    protected void FlowStart() {
+        flowStartTime = Time.time;
+        InvokeRepeating("FlowTick", 0.0f, 0.075f);
+    }
+
+    //abstract protected void FlowTick();
+    void FlowTick() {
+        Debug.Log("We flowin'");
+    }
+
+    protected void FlowToNext() {
+        bool done = false;
+        foreach (TubeSideData flowOut in _sides) {
+            if (!done && (flowOut.State == InputOutputState.Both || flowOut.State == InputOutputState.Output) && flowOut.Direction != inFlowSide) {
+                //get next grid tile in the valid tile's direction.
+                bool valid = false;
+                DirectionState flowTo = DirectionState.West;
+                byte newX = xCord;
+                byte newY = yCord;
+                Debug.Log(newY);
+
+                switch (flowOut.Direction) {
+                    case DirectionState.North:
+                        flowTo = DirectionState.South;
+                        newY--;
+                        break;
+                    case DirectionState.South:
+                        flowTo = DirectionState.North;
+                        newY++;
+                        break;
+                    case DirectionState.East:
+                        flowTo = DirectionState.West;
+                        newX++;
+                        break;
+                    case DirectionState.West:
+                        flowTo = DirectionState.East;
+                        newX--;
+                        break;
+                    default:
+                        Debug.Log("It's all on fire...");
+                        break;
+                }
+
+                //Coordinate validation and validation of input flow.
+                GameObject[,] grid = manager.GetGrid();
+                Tube nextTube = null;
+                if ((newX >= 0 && newX < grid.GetLength(0)) && (newY >= 0 && newY < grid.GetLength(1))) {
+                    nextTube = grid[newX,newY].GetComponent<Tube>();
+                    if (nextTube != null) {
+                        Debug.Log("Should be here.");
+                        Debug.Log("Target: " + flowTo);
+                        for(int i = 0; i < nextTube._sides.Length; i++) {
+                            Debug.Log(nextTube._sides[i].Direction);
+                            Debug.Log(nextTube._sides[i].State);
+                            if (nextTube._sides[i].Direction == flowTo && (nextTube._sides[i].State != InputOutputState.Output && nextTube._sides[i].State != InputOutputState.None)) {
+                                valid = true;
+                            }
+                        }
+                    }
+                    
+                }
+
+                
+                //If there is no tile or correct input side, end the game as our player has failed us (yet again).
+                if (valid == false) {
+                    //EndGame();
+                    Debug.Log("Game sucks.");
+                } else {
+                    //start the flow on that tile if a proper input/both side is connected. (Out=North, then In=South, etc.)
+                    nextTube.FlowStart();
+                    nextTube.inFlowSide = flowTo;  
+                    done = true;
+                }
+
+
+            }
+        }
     }
 }

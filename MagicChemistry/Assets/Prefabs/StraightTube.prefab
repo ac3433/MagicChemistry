@@ -177,6 +177,9 @@ MonoBehaviour:
   _East: 3
   tileSize: 1
   gridTile: {fileID: 0}
+  mask: {fileID: 1016555892947120}
+  startDelaySec: 0
+  maxTimeTillFill: 10
 --- !u!212 &212164455174305992
 SpriteRenderer:
   m_ObjectHideFlags: 1

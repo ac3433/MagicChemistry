@@ -160,48 +160,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2ed56d20818a6c428ae86f3128a44bc, type: 2}
   m_IsPrefabParent: 0
---- !u!1001 &404547643
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0.789
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -0.015
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4642378028500372, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &730055033
 Prefab:
   m_ObjectHideFlags: 0
@@ -429,7 +387,7 @@ MonoBehaviour:
   _tile:
   - {fileID: 1631044895540838, guid: b4c6587b8cbaebc47b88531eb5285114, type: 2}
   - {fileID: 1315035008973698, guid: 83887eb19a18c2643b101eca80573764, type: 2}
-  - {fileID: 1899666240638002, guid: 144ad85f95bd28844a2532ba00bdabca, type: 2}
+  - {fileID: 1309805582212210, guid: 276b551587f5c8d4196b6c0680953b1d, type: 2}
   _startPosition: {fileID: 1114489219}
   _specialTile:
   - xCoordinate: 0
