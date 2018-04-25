@@ -125,7 +125,8 @@ public class Tube : TubeData {
         return null;
     }
 
-    protected void FlowStart() {
+    public void FlowStart(DirectionState inFlowSide) {
+        this.inFlowSide = inFlowSide;
         flowStartTime = Time.time;
         InvokeRepeating("FlowTick", 0.0f, 0.075f);
     }
@@ -190,12 +191,11 @@ public class Tube : TubeData {
                 
                 //If there is no tile or correct input side, end the game as our player has failed us (yet again).
                 if (valid == false) {
-                    //EndGame();
                     Debug.Log("Game sucks.");
+                    manager.GameOver();
                 } else {
                     //start the flow on that tile if a proper input/both side is connected. (Out=North, then In=South, etc.)
-                    nextTube.FlowStart();
-                    nextTube.inFlowSide = flowTo;  
+                    nextTube.FlowStart(flowTo); 
                     done = true;
                 }
 
