@@ -67,8 +67,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4187875300517864}
-  - component: {fileID: 114541202583296678}
   - component: {fileID: 82649607869889352}
+  - component: {fileID: 114498211917532314}
   m_Layer: 8
   m_Name: ThreeWayAddTube
   m_TagString: Untagged
@@ -307,7 +307,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114541202583296678
+--- !u!114 &114498211917532314
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -315,20 +315,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1304772425554428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2d0ff19c2dba934295609de157cd304, type: 3}
+  m_Script: {fileID: 11500000, guid: f8434be462324634cac833cd7f9591bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _North: 0
   _South: 0
   _West: 3
   _East: 1
-  _audioSource: {fileID: 0}
   tileSize: 1
   manager: {fileID: 0}
   gridTile: {fileID: 0}
   mask: {fileID: 0}
   startDelaySec: 0
-  maxTimeTillFill: 0
+  maxTimeTillFill: 10
+  _operation: 0
 --- !u!114 &114782527649566702
 MonoBehaviour:
   m_ObjectHideFlags: 1

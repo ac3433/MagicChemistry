@@ -65,6 +65,7 @@ public class Tube : TubeData {
         {
             if (MouseOnMe())
             {
+                manager.SetTile(xCord, yCord, gridTile);
                 Destroy(gameObject);
             }
         }
@@ -81,7 +82,7 @@ public class Tube : TubeData {
         }
 
         // Place in the center of the empty tile
-        Vector3 tileBounds = gridTile.GetComponent<SpriteRenderer>().bounds.size;
+        Vector3 tileBounds = gridTile.GetComponentInChildren<SpriteRenderer>().bounds.size;
         Vector3 tilePos = gridTile.transform.position;
         float offsetX = tileBounds.x / 2;
         float offsetY = tileBounds.y / 2;
@@ -97,6 +98,11 @@ public class Tube : TubeData {
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
+                // Tile is occupied by a tube, ignore
+                if (grid[i,j].GetComponent<TubeData>() != null)
+                {
+                    continue;
+                }
                 Vector3 tileBounds = grid[i,j].GetComponentInChildren<SpriteRenderer>().bounds.size;
                 Vector3 tilePos = grid[i, j].transform.position;
                 float xSize = tileBounds.x;

@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TubeDataOperation : TubeData
+public class TubeDataOperation : Tube
 {
     [SerializeField]
     private OperationState _operation = OperationState.None;
 
-    void Start()
+    new void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         _sides = new TubeSideData[4];
+        _cam = Camera.main;
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
         _sides[1] = new TubeSideData() { Direction = DirectionState.South, State = _South };
         _sides[2] = new TubeSideData() { Direction = DirectionState.West, State = _West };

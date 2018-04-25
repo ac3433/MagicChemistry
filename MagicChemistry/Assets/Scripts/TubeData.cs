@@ -16,7 +16,7 @@ public class TubeData : MonoBehaviour {
     protected Camera _cam;
     protected TubeSideData[] _sides;
 
-    public AudioSource _audioSource;
+    protected AudioSource _audioSource;
     public float tileSize = 1;
 
     protected float _value;
