@@ -48,15 +48,16 @@ public class Tube : TubeData {
                 // Place the tube
                 _placed = true;
                 SnapToTile();
-            } else
+                _audioSource.Play();
+            } 
+        }
+        if (Input.GetMouseButtonDown(0) && _placed)
+        {
+            // Rotate the tube
+            if (MouseOnMe())
             {
-                // Rotate the tube
-                if (MouseOnMe())
-                {
-                    RotateClockwise();
-                }
+                RotateClockwise();
             }
-            
         }
 
         // Delete the tube

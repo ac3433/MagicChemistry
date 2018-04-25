@@ -16,6 +16,7 @@ public class TubeData : MonoBehaviour {
     protected Camera _cam;
     protected TubeSideData[] _sides;
 
+    public AudioSource _audioSource;
     public float tileSize = 1;
 
     protected float _value;
@@ -24,6 +25,7 @@ public class TubeData : MonoBehaviour {
 
     protected void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         _cam = Camera.main;
         _sides = new TubeSideData[4];
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
