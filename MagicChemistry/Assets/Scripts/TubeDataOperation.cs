@@ -52,11 +52,11 @@ public class TubeDataOperation : Tube
             }
         }
 
-        value = sortOrder[0].incomingValue;
+        value = sortOrder[0].IncomingValue;
 
         for(int i = 1; i < sortOrder.Length; i++)
         {
-            value = CalculateOperation(value, sortOrder[i].incomingValue);
+            value = CalculateOperation(value, sortOrder[i].IncomingValue);
         }
 
         return value;

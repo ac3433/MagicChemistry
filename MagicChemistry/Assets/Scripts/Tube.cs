@@ -13,10 +13,12 @@ public class Tube : TubeData {
     [SerializeField] protected GameObject mask;
     [SerializeField] protected float startDelaySec;
     [SerializeField] protected float maxTimeTillFill;
+    protected float timeTillFill;
 
     protected float flowStartTime;
     protected float maskScale;
     protected bool flowing = false;
+    protected bool filled = false;
     protected DirectionState inFlowSide;
 
     new void Start() {
@@ -51,7 +53,7 @@ public class Tube : TubeData {
                 _audioSource.Play();
             } 
         }
-        if (Input.GetMouseButtonDown(0) && _placed)
+        if (Input.GetMouseButtonDown(0) && _placed && !flowing)
         {
             // Rotate the tube
             if (MouseOnMe())
@@ -61,7 +63,7 @@ public class Tube : TubeData {
         }
 
         // Delete the tube
-        if (Input.GetMouseButtonUp(1) && _placed)
+        if (Input.GetMouseButtonUp(1) && _placed && !flowing)
         {
             if (MouseOnMe())
             {
@@ -69,7 +71,21 @@ public class Tube : TubeData {
                 Destroy(gameObject);
             }
         }
-	}
+
+        if (flowing && !filled)
+        {
+            if (timeTillFill > 0)
+            {
+                timeTillFill -= Time.deltaTime;
+            }
+            else
+            {
+                CancelInvoke();
+                FlowToNext();
+                filled = true;
+            }
+        }
+    }
 
     void SnapToTile()
     {
@@ -125,15 +141,19 @@ public class Tube : TubeData {
         return null;
     }
 
-    public void FlowStart(DirectionState inFlowSide) {
+    public void FlowStart(DirectionState inFlowSide, float val) {
+        flowing = true;
         this.inFlowSide = inFlowSide;
+        _value = val;
         flowStartTime = Time.time;
-        InvokeRepeating("FlowTick", 0.0f, 0.075f);
+        timeTillFill = maxTimeTillFill;
+        InvokeRepeating("FlowTick", 0.0f, 1f);
+        
     }
 
     //abstract protected void FlowTick();
     void FlowTick() {
-        Debug.Log("We flowin'");
+        Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
     }
 
     protected void FlowToNext() {
@@ -192,10 +212,16 @@ public class Tube : TubeData {
                 //If there is no tile or correct input side, end the game as our player has failed us (yet again).
                 if (valid == false) {
                     Debug.Log("Game sucks.");
-                    manager.GameOver();
+                    if (manager.CheckWinState(xCord, yCord, flowOut.Direction, _value))
+                    {
+                        manager.GameWin();
+                    } else
+                    {
+                        manager.GameOver();
+                    }
                 } else {
                     //start the flow on that tile if a proper input/both side is connected. (Out=North, then In=South, etc.)
-                    nextTube.FlowStart(flowTo); 
+                    nextTube.FlowStart(flowTo, _value); 
                     done = true;
                 }
 

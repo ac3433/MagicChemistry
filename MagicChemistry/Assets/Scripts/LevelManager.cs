@@ -34,6 +34,8 @@ public class LevelManager : MonoBehaviour {
     private int _flowEndY;
     [SerializeField]
     private DirectionState _flowEndDirection;
+    [SerializeField]
+    private float _flowEndVal;
 
     [SerializeField]
     private float maxTimeBeforeFlowStarts = 10; // in seconds
@@ -105,7 +107,16 @@ public class LevelManager : MonoBehaviour {
             return;
         }
 
-        tube.FlowStart(_flowStartDirection);
+        tube.FlowStart(_flowStartDirection, 0);
+    }
+
+    public bool CheckWinState(int xCord, int yCord, DirectionState dir, float val)
+    {
+        if (xCord == _flowEndX && yCord == _flowEndY && dir == _flowEndDirection && val == _flowEndVal)
+        {
+            return true;
+        }
+        return false;
     }
 
     public float TileSize() { return _tile[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x; }
@@ -172,6 +183,12 @@ public class LevelManager : MonoBehaviour {
 
     public void GameOver()
     {
+        Debug.Log("Lose");
         SceneManager.LoadScene("Level_1");
+    }
+
+    public void GameWin()
+    {
+        Debug.Log("Win");
     }
 }
