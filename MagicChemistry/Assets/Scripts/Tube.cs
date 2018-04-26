@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tube : TubeData, IFlowable {
+public class Tube : TubeData {
 
     protected bool _placed = false; // Tube starts out attached to the mouse cursor from dragging on the template.
     public LevelManager manager;
@@ -10,7 +10,7 @@ public class Tube : TubeData, IFlowable {
     [SerializeField]
     protected GameObject gridTile; // Tile the tube is snapped to
 
-    [SerializeField] protected GameObject mask;
+    [SerializeField] protected GameObject[] mask;
     [SerializeField] protected float startDelaySec;
     [SerializeField] protected float maxTimeTillFill;
     protected float timeTillFill;
@@ -19,7 +19,7 @@ public class Tube : TubeData, IFlowable {
     protected float maskScale;
     protected bool flowing = false;
     protected bool filled = false;
-    private DirectionState inFlowSide;
+    protected DirectionState inFlowSide;
 
     new void Start() {
         base.Start();
@@ -54,13 +54,13 @@ public class Tube : TubeData, IFlowable {
             } 
         }
         if (Input.GetMouseButtonDown(0) && _placed && !flowing)
-        {
-            // Rotate the tube
-            if (MouseOnMe())
             {
-                RotateClockwise();
+                // Rotate the tube
+                if (MouseOnMe())
+                {
+                    RotateClockwise();
+                }
             }
-        }
 
         // Delete the tube
         if (Input.GetMouseButtonUp(1) && _placed && !flowing)
@@ -77,7 +77,7 @@ public class Tube : TubeData, IFlowable {
             if (timeTillFill > 0)
             {
                 timeTillFill -= Time.deltaTime;
-            }
+	}
             else
             {
                 CancelInvoke();
@@ -148,6 +148,7 @@ public class Tube : TubeData, IFlowable {
         flowStartTime = Time.time;
         timeTillFill = maxTimeTillFill;
         InvokeRepeating("FlowTick", 0.0f, 1f);
+        
     }
 
     public virtual void FlowTick() {
@@ -203,6 +204,7 @@ public class Tube : TubeData, IFlowable {
                             }
                         }
                     }
+                    
                 }
 
                 
