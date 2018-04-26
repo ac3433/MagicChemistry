@@ -20,7 +20,7 @@ public class TubeData : MonoBehaviour {
     protected AudioSource _audioSource;
     public float tileSize = 1;
 
-    protected float _value;
+    protected int _value;
     protected byte xCord;
     protected byte yCord;
 
@@ -77,7 +77,7 @@ public class TubeData : MonoBehaviour {
         return true;
     }
 
-    public void SetValue(float value) { _value = value; }
+    public void SetValue(int value) { _value = value; }
     public void SetCoordinates(byte x, byte y) {
         xCord = x;
         yCord = y;

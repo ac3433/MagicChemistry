@@ -40,10 +40,13 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private float maxTimeBeforeFlowStarts = 10; // in seconds
     private float timeBeforeFlowStarts;
+
     public Text flowTimer;
+    public Text outputText;
 
     [SerializeField]
     private List<GridPlacement> _specialTile;
+    private List<Flask> _flasks;
 
     [SerializeField]
     [Tooltip("It will create a perfect sqaure grid based on the number. Ex. 8 will create 8x8 grid.")]
@@ -53,6 +56,8 @@ public class LevelManager : MonoBehaviour {
     private GameObject[,] _grid;
 
 	void Start () {
+        outputText.text = _flowEndVal.ToString();
+        _flasks = new List<Flask>();
 		if(_tile == null)
         {
             Debug.LogError(string.Format("GameObject: {0}\nScript: LevelManager\nError: Missing tile game object.",gameObject.name));
@@ -79,10 +84,10 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    private void StartFlow()
+    private void Flow(int x, int y, DirectionState dir, int val)
     {
         Debug.Log("Flow starting...");
-        GameObject startObj = _grid[_flowStartX, _flowStartY];
+        GameObject startObj = _grid[x, y];
         Tube tube = startObj.GetComponent<Tube>();
         // If no tube found in the start spot, game over
         if (tube == null)
@@ -90,13 +95,12 @@ public class LevelManager : MonoBehaviour {
             GameOver();
             return;
         }
-
         // If the tube in the start spot is facing the wrong way, game over
         TubeSideData[] sides = tube.GetSides();
         bool inputCorrect = false;
         for (int i = 0; i < sides.Length; i++)
         {
-            if (sides[i].Direction == _flowStartDirection && (sides[i].State == InputOutputState.Input || sides[i].State == InputOutputState.Both))
+            if (sides[i].Direction == dir && (sides[i].State == InputOutputState.Input || sides[i].State == InputOutputState.Both))
             {
                 inputCorrect = true;
             }
@@ -107,7 +111,17 @@ public class LevelManager : MonoBehaviour {
             return;
         }
 
-        tube.FlowStart(_flowStartDirection, 0);
+        tube.FlowStart(dir, val);
+
+    }
+
+    private void StartFlow()
+    {
+        Debug.Log("Flow starting...");
+        Flow(_flowStartX, _flowStartY, _flowStartDirection, 0);
+        foreach (Flask flask in _flasks) {
+            Flow(flask.nextXCord, flask.nextYCord, flask.flowTo, flask.value);
+        }
     }
 
     public bool CheckWinState(int xCord, int yCord, DirectionState dir, float val)
@@ -127,7 +141,14 @@ public class LevelManager : MonoBehaviour {
 
         foreach (GridPlacement placement in _specialTile)
         {
-            PlaceTile(placement.xCoordinate, placement.yCoordinate, placement.spriteID);
+            GameObject newObj = PlaceTile(placement.xCoordinate, placement.yCoordinate, placement.spriteID);
+            Flask flask = newObj.GetComponent<Flask>();
+            if (flask != null)
+            {
+                flask.xCord = placement.xCoordinate;
+                flask.yCord = placement.yCoordinate;
+                _flasks.Add(newObj.GetComponent<Flask>());
+            }
         }
 
         for (int y = 0; y < _gridSize; y++)
@@ -144,24 +165,24 @@ public class LevelManager : MonoBehaviour {
         _grid[x,y] = go_in;
     }
 
-    public void PlaceTile(int x, int y, int tileID)
+    public GameObject PlaceTile(int x, int y, int tileID)
     {
         if(x < 0 || x > _gridSize)
         {
             Debug.LogError(string.Format("GameObject: {0}\nScript: LevelManager\nError: X coordinate is out of bound.",gameObject.name));
-            return;
+            return null;
         }
 
         if (y < 0 || y > _gridSize)
         {
             Debug.LogError(string.Format("GameObject: {0}\nScript: LevelManager\nError: Y coordinate is out of bound.",gameObject.name));
-            return;
+            return null;
         }
 
         if (tileID < 0 || tileID >_tile.Length)
         {
             Debug.LogError(string.Format("GameObject: {0}\nScript: LevelManager\nError: tile id is out of bound.",gameObject.name));
-            return;
+            return null;
         }
 
         GameObject newTile = Instantiate(_tile[tileID]);
@@ -174,6 +195,7 @@ public class LevelManager : MonoBehaviour {
             newTube.SetCoordinates((byte)x,(byte)y);
         }
         _grid[x,y] = newTile;
+        return newTile;
     }
 
     public GameObject[,] GetGrid()

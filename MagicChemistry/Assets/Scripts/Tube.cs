@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tube : TubeData {
+public class Tube : TubeData, IFlowable {
 
     protected bool _placed = false; // Tube starts out attached to the mouse cursor from dragging on the template.
     public LevelManager manager;
@@ -19,7 +19,7 @@ public class Tube : TubeData {
     protected float maskScale;
     protected bool flowing = false;
     protected bool filled = false;
-    protected DirectionState inFlowSide;
+    private DirectionState inFlowSide;
 
     new void Start() {
         base.Start();
@@ -141,22 +141,20 @@ public class Tube : TubeData {
         return null;
     }
 
-    public void FlowStart(DirectionState inFlowSide, float val) {
+    public virtual void FlowStart(DirectionState inFlowSide, int val) {
         flowing = true;
         this.inFlowSide = inFlowSide;
         _value = val;
         flowStartTime = Time.time;
         timeTillFill = maxTimeTillFill;
         InvokeRepeating("FlowTick", 0.0f, 1f);
-        
     }
 
-    //abstract protected void FlowTick();
-    void FlowTick() {
+    public virtual void FlowTick() {
         Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
     }
 
-    protected void FlowToNext() {
+    public virtual void FlowToNext() {
         bool done = false;
         foreach (TubeSideData flowOut in _sides) {
             if (!done && (flowOut.State == InputOutputState.Both || flowOut.State == InputOutputState.Output) && flowOut.Direction != inFlowSide) {
@@ -205,7 +203,6 @@ public class Tube : TubeData {
                             }
                         }
                     }
-                    
                 }
 
                 
