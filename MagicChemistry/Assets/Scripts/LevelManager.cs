@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [System.Serializable]
 public struct GridPlacement
@@ -18,6 +20,27 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     private GameObject _startPosition;
+
+    [SerializeField]
+    private int _flowStartX;
+    [SerializeField]
+    private int _flowStartY;
+    [SerializeField]
+    private DirectionState _flowStartDirection;
+
+    [SerializeField]
+    private int _flowEndX;
+    [SerializeField]
+    private int _flowEndY;
+    [SerializeField]
+    private DirectionState _flowEndDirection;
+    [SerializeField]
+    private float _flowEndVal;
+
+    [SerializeField]
+    private float maxTimeBeforeFlowStarts = 10; // in seconds
+    private float timeBeforeFlowStarts;
+    public Text flowTimer;
 
     [SerializeField]
     private List<GridPlacement> _specialTile;
@@ -43,7 +66,58 @@ public class LevelManager : MonoBehaviour {
         }
 
         CreateInteractableTile();
+        timeBeforeFlowStarts = maxTimeBeforeFlowStarts;
+        Invoke("StartFlow", maxTimeBeforeFlowStarts);
 	}
+
+    private void Update()
+    {
+        if (timeBeforeFlowStarts >= 0)
+        {
+            timeBeforeFlowStarts -= Time.deltaTime;
+            flowTimer.text = Mathf.Round(timeBeforeFlowStarts).ToString();
+        }
+    }
+
+    private void StartFlow()
+    {
+        Debug.Log("Flow starting...");
+        GameObject startObj = _grid[_flowStartX, _flowStartY];
+        Tube tube = startObj.GetComponent<Tube>();
+        // If no tube found in the start spot, game over
+        if (tube == null)
+        {
+            GameOver();
+            return;
+        }
+
+        // If the tube in the start spot is facing the wrong way, game over
+        TubeSideData[] sides = tube.GetSides();
+        bool inputCorrect = false;
+        for (int i = 0; i < sides.Length; i++)
+        {
+            if (sides[i].Direction == _flowStartDirection && (sides[i].State == InputOutputState.Input || sides[i].State == InputOutputState.Both))
+            {
+                inputCorrect = true;
+            }
+        }
+        if (!inputCorrect)
+        {
+            GameOver();
+            return;
+        }
+
+        tube.FlowStart(_flowStartDirection, 0);
+    }
+
+    public bool CheckWinState(int xCord, int yCord, DirectionState dir, float val)
+    {
+        if (xCord == _flowEndX && yCord == _flowEndY && dir == _flowEndDirection && val == _flowEndVal)
+        {
+            return true;
+        }
+        return false;
+    }
 
     public float TileSize() { return _tile[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x; }
 	
@@ -64,7 +138,6 @@ public class LevelManager : MonoBehaviour {
                     PlaceTile(x, y, 0);
             }
         }
-
     }
 
     public void SetTile(int x, int y, GameObject go_in) {
@@ -108,4 +181,14 @@ public class LevelManager : MonoBehaviour {
         return _grid;
     }
 
+    public void GameOver()
+    {
+        Debug.Log("Lose");
+        SceneManager.LoadScene("Level_1");
+    }
+
+    public void GameWin()
+    {
+        Debug.Log("Win");
+    }
 }

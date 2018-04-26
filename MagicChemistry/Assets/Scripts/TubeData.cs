@@ -14,8 +14,10 @@ public class TubeData : MonoBehaviour {
     protected InputOutputState _East;
 
     protected Camera _cam;
+    [SerializeField]
     protected TubeSideData[] _sides;
 
+    protected AudioSource _audioSource;
     public float tileSize = 1;
 
     protected float _value;
@@ -24,6 +26,7 @@ public class TubeData : MonoBehaviour {
 
     protected void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         _cam = Camera.main;
         _sides = new TubeSideData[4];
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
@@ -33,6 +36,11 @@ public class TubeData : MonoBehaviour {
 
         if (!CheckValidSides())
             Debug.Log(string.Format("GameObject: {0}\nTileData Script: Input Output State is not valid. Need at least 1 input and output",gameObject.name));
+    }
+
+    public TubeSideData[] GetSides()
+    {
+        return _sides;
     }
 
     public void AssignInputOutputStateSide(DirectionState dir, InputOutputState io)
