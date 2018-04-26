@@ -201,7 +201,7 @@ MonoBehaviour:
   gridTile: {fileID: 0}
   mask: {fileID: 0}
   startDelaySec: 0
-  maxTimeTillFill: 10
+  maxTimeTillFill: 5
 --- !u!212 &212164455174305992
 SpriteRenderer:
   m_ObjectHideFlags: 1

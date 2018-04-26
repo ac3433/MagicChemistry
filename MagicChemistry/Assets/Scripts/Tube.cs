@@ -144,7 +144,7 @@ public class Tube : TubeData {
         return null;
     }
 
-    public void FlowStart(DirectionState inFlowSide, float val) {
+    public virtual void FlowStart(DirectionState inFlowSide, int val) {
         flowing = true;
         this.inFlowSide = inFlowSide;
         _value = val;
@@ -154,7 +154,7 @@ public class Tube : TubeData {
         
     }
 
-    protected void FlowTick() {
+    public virtual void FlowTick() {
         //Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
         float fracJourney = ((Time.time - flowStartTime) / maxTimeTillFill);
         masks[0].transform.localScale = new Vector3(masks[0].transform.localScale.x,
@@ -166,7 +166,7 @@ public class Tube : TubeData {
         }
     }
 
-    protected void FlowToNext() {
+    public virtual void FlowToNext() {
         bool done = false;
         foreach (TubeSideData flowOut in _sides) {
             if (!done && (flowOut.State == InputOutputState.Both || flowOut.State == InputOutputState.Output) && flowOut.Direction != inFlowSide) {
