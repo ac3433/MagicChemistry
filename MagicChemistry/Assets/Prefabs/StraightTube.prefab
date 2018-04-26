@@ -199,9 +199,10 @@ MonoBehaviour:
   tileSize: 1
   manager: {fileID: 0}
   gridTile: {fileID: 0}
-  mask: {fileID: 0}
+  masks: []
   startDelaySec: 0
   maxTimeTillFill: 5
+  fill: {fileID: 212291889334905594}
 --- !u!212 &212164455174305992
 SpriteRenderer:
   m_ObjectHideFlags: 1

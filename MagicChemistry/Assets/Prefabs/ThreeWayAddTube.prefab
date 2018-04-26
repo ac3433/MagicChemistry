@@ -235,9 +235,10 @@ MonoBehaviour:
   tileSize: 1
   manager: {fileID: 0}
   gridTile: {fileID: 0}
-  mask: {fileID: 0}
+  masks: []
   startDelaySec: 0
   maxTimeTillFill: 5
+  fill: {fileID: 212600715652210444}
   _operation: 0
   numInputs: 2
 --- !u!114 &114782527649566702

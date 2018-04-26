@@ -99,6 +99,7 @@ public class TubeOperation : Tube, IFlowable
         // If all inputs are filled, continue
         if (numInputsFilled == numInputs)
         {
+            fill.color = Color.red;
             flowing = true;
             for (int i = 0; i < numInputsFilled-1; i++)
             {

@@ -13,6 +13,7 @@ public class Tube : TubeData {
     [SerializeField] protected GameObject[] masks;
     [SerializeField] protected float startDelaySec;
     [SerializeField] protected float maxTimeTillFill;
+    [SerializeField] protected SpriteRenderer fill;
     protected float timeTillFill;
 
     protected float flowStartTime;
@@ -145,6 +146,7 @@ public class Tube : TubeData {
     }
 
     public virtual void FlowStart(DirectionState inFlowSide, int val) {
+        fill.color = Color.red;
         flowing = true;
         this.inFlowSide = inFlowSide;
         _value = val;
@@ -155,15 +157,15 @@ public class Tube : TubeData {
     }
 
     public virtual void FlowTick() {
-        //Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
+        Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
         float fracJourney = ((Time.time - flowStartTime) / maxTimeTillFill);
-        masks[0].transform.localScale = new Vector3(masks[0].transform.localScale.x,
-                                                Mathf.Lerp(maskScale[0], 0.01f, fracJourney),
-                                                masks[0].transform.localScale.z);
-        if (fracJourney > 1.0f) {
-            FlowToNext();
-            CancelInvoke("FlowTick");
-        }
+        //masks[0].transform.localScale = new Vector3(masks[0].transform.localScale.x,
+        //                                        Mathf.Lerp(maskScale[0], 0.01f, fracJourney),
+        //                                        masks[0].transform.localScale.z);
+        //if (fracJourney > 1.0f) {
+        //    FlowToNext();
+        //    CancelInvoke("FlowTick");
+        //}
     }
 
     public virtual void FlowToNext() {
