@@ -10,7 +10,7 @@ public class Tube : TubeData {
     [SerializeField]
     protected GameObject gridTile; // Tile the tube is snapped to
 
-    [SerializeField] protected GameObject mask;
+    [SerializeField] protected GameObject[] mask;
     [SerializeField] protected float startDelaySec;
     [SerializeField] protected float maxTimeTillFill;
 
@@ -118,13 +118,12 @@ public class Tube : TubeData {
         return null;
     }
 
-    protected void FlowStart() {
+    public void FlowStart() {
         flowStartTime = Time.time;
         InvokeRepeating("FlowTick", 0.0f, 0.075f);
     }
 
-    //abstract protected void FlowTick();
-    void FlowTick() {
+    protected void FlowTick() {
         Debug.Log("We flowin'");
     }
 
