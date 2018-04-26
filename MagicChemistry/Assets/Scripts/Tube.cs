@@ -10,13 +10,13 @@ public class Tube : TubeData {
     [SerializeField]
     protected GameObject gridTile; // Tile the tube is snapped to
 
-    [SerializeField] protected GameObject[] mask;
+    [SerializeField] protected GameObject[] masks;
     [SerializeField] protected float startDelaySec;
     [SerializeField] protected float maxTimeTillFill;
     protected float timeTillFill;
 
     protected float flowStartTime;
-    protected float maskScale;
+    protected float[] maskScale;
     protected bool flowing = false;
     protected bool filled = false;
     protected DirectionState inFlowSide;
@@ -25,6 +25,9 @@ public class Tube : TubeData {
         base.Start();
         Vector3 mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(mousePos.x, mousePos.y, 0);
+        for(int i = 0; i < masks.Length; i++) {
+            maskScale[i] = masks[i].transform.localScale.y;
+        }
     }
 
     public void SetManager(LevelManager manager)
@@ -147,12 +150,20 @@ public class Tube : TubeData {
         _value = val;
         flowStartTime = Time.time;
         timeTillFill = maxTimeTillFill;
-        InvokeRepeating("FlowTick", 0.0f, 1f);
+        InvokeRepeating("FlowTick", startDelaySec, 0.075f);
         
     }
 
     protected void FlowTick() {
-        Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
+        //Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
+        float fracJourney = ((Time.time - flowStartTime) / maxTimeTillFill);
+        masks[0].transform.localScale = new Vector3(masks[0].transform.localScale.x,
+                                                Mathf.Lerp(maskScale[0], 0.01f, fracJourney),
+                                                masks[0].transform.localScale.z);
+        if (fracJourney > 1.0f) {
+            FlowToNext();
+            CancelInvoke("FlowTick");
+        }
     }
 
     protected void FlowToNext() {
