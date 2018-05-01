@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TubeOperation : Tube, IFlowable
+public class TubeOperation : Tube
 {
-    [SerializeField]
-    private OperationState _operation = OperationState.None;
     public int numInputs;
     private DirectionState[] _inFlowSides;
     private int[] _inputVals;
@@ -14,7 +12,6 @@ public class TubeOperation : Tube, IFlowable
     {
         _inFlowSides = new DirectionState[numInputs];
         _inputVals = new int[numInputs];
-        _audioSource = GetComponent<AudioSource>();
         _sides = new TubeSideData[4];
         _cam = Camera.main;
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
@@ -86,28 +83,6 @@ public class TubeOperation : Tube, IFlowable
 
             default:
                 return 0;
-        }
-    }
-
-    public override void FlowStart(DirectionState inFlowSide, int val)
-    {
-        
-        _inFlowSides[numInputsFilled] = inFlowSide;
-        _inputVals[numInputsFilled] = val;
-        numInputsFilled++;
-
-        // If all inputs are filled, continue
-        if (numInputsFilled == numInputs)
-        {
-            fill.color = Color.red;
-            flowing = true;
-            for (int i = 0; i < numInputsFilled-1; i++)
-            {
-                _value = CalculateOperation(_inputVals[i], _inputVals[i + 1]);
-            }
-            flowStartTime = Time.time;
-            timeTillFill = maxTimeTillFill;
-            InvokeRepeating("FlowTick", 0.0f, 1f);
         }
     }
 
@@ -194,7 +169,7 @@ public class TubeOperation : Tube, IFlowable
                 if (valid == false)
                 {
                     Debug.Log("Game sucks.");
-                    if (manager.CheckWinState(xCord, yCord, flowOut.Direction, _value))
+                    if (manager.CheckWinState(xCord, yCord, flowOut.Direction, _outValue))
                     {
                         manager.GameWin();
                     }
@@ -206,7 +181,7 @@ public class TubeOperation : Tube, IFlowable
                 else
                 {
                     //start the flow on that tile if a proper input/both side is connected. (Out=North, then In=South, etc.)
-                    nextTube.FlowStart(flowTo, _value);
+                    nextTube.FlowStart(flowTo, _outValue, _operation);
                     done = true;
                 }
 

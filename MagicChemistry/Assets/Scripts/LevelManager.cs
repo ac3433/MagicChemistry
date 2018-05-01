@@ -29,6 +29,8 @@ public class LevelManager : MonoBehaviour {
     private DirectionState _flowStartDirection;
 
     [SerializeField]
+    private int _startValue;
+    [SerializeField]
     private int _flowEndX;
     [SerializeField]
     private int _flowEndY;
@@ -43,10 +45,10 @@ public class LevelManager : MonoBehaviour {
 
     public Text flowTimer;
     public Text outputText;
+    public Text inputText;
 
     [SerializeField]
     private List<GridPlacement> _specialTile;
-    private List<Flask> _flasks;
 
     [SerializeField]
     [Tooltip("It will create a perfect sqaure grid based on the number. Ex. 8 will create 8x8 grid.")]
@@ -57,7 +59,7 @@ public class LevelManager : MonoBehaviour {
 
 	void Start () {
         outputText.text = _flowEndVal.ToString();
-        _flasks = new List<Flask>();
+        inputText.text = _startValue.ToString();
 		if(_tile == null)
         {
             Debug.LogError(string.Format("GameObject: {0}\nScript: LevelManager\nError: Missing tile game object.",gameObject.name));
@@ -80,7 +82,7 @@ public class LevelManager : MonoBehaviour {
         if (timeBeforeFlowStarts >= 0)
         {
             timeBeforeFlowStarts -= Time.deltaTime;
-            flowTimer.text = Mathf.Round(timeBeforeFlowStarts).ToString();
+            flowTimer.text = "Start in: " + Mathf.Round(timeBeforeFlowStarts).ToString();
         }
     }
 
@@ -111,17 +113,14 @@ public class LevelManager : MonoBehaviour {
             return;
         }
 
-        tube.FlowStart(dir, val);
+        tube.FlowStart(dir, val, OperationState.None);
 
     }
 
     private void StartFlow()
     {
         Debug.Log("Flow starting...");
-        Flow(_flowStartX, _flowStartY, _flowStartDirection, 0);
-        foreach (Flask flask in _flasks) {
-            Flow(flask.nextXCord, flask.nextYCord, flask.flowTo, flask.value);
-        }
+        Flow(_flowStartX, _flowStartY, _flowStartDirection, _startValue);
     }
 
     public bool CheckWinState(int xCord, int yCord, DirectionState dir, float val)
@@ -142,13 +141,6 @@ public class LevelManager : MonoBehaviour {
         foreach (GridPlacement placement in _specialTile)
         {
             GameObject newObj = PlaceTile(placement.xCoordinate, placement.yCoordinate, placement.spriteID);
-            Flask flask = newObj.GetComponent<Flask>();
-            if (flask != null)
-            {
-                flask.xCord = placement.xCoordinate;
-                flask.yCord = placement.yCoordinate;
-                _flasks.Add(newObj.GetComponent<Flask>());
-            }
         }
 
         for (int y = 0; y < _gridSize; y++)

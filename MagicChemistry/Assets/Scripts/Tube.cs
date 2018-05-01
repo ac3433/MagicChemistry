@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tube : TubeData {
 
     protected bool _placed = false; // Tube starts out attached to the mouse cursor from dragging on the template.
     public LevelManager manager;
+    public Text numberText;
 
     [SerializeField]
     protected GameObject gridTile; // Tile the tube is snapped to
-
+  
     [SerializeField] protected GameObject[] masks;
     [SerializeField] protected float startDelaySec;
     [SerializeField] protected float maxTimeTillFill;
@@ -29,6 +31,7 @@ public class Tube : TubeData {
         for(int i = 0; i < masks.Length; i++) {
             maskScale[i] = masks[i].transform.localScale.y;
         }
+        _pickupSound.Play();
     }
 
     public void SetManager(LevelManager manager)
@@ -54,7 +57,7 @@ public class Tube : TubeData {
                 // Place the tube
                 _placed = true;
                 SnapToTile();
-                _audioSource.Play();
+                _placeSound.Play();
             } 
         }
         if (Input.GetMouseButtonDown(0) && _placed && !flowing)
@@ -81,7 +84,7 @@ public class Tube : TubeData {
             if (timeTillFill > 0)
             {
                 timeTillFill -= Time.deltaTime;
-	}
+	        }
             else
             {
                 CancelInvoke();
@@ -145,19 +148,40 @@ public class Tube : TubeData {
         return null;
     }
 
-    public virtual void FlowStart(DirectionState inFlowSide, int val) {
+    public virtual void FlowStart(DirectionState inFlowSide, int inVal, OperationState operation) {
+        _flowSound.Play();
+        _inValue = inVal;
+        if (_operation == OperationState.None)
+        {
+            _operation = operation;
+        }
         fill.color = Color.red;
         flowing = true;
         this.inFlowSide = inFlowSide;
-        _value = val;
         flowStartTime = Time.time;
         timeTillFill = maxTimeTillFill;
+        if (_thisVal != 0 && _operation != OperationState.None)
+        {
+            // If this is a numbered tube, perform the stored operation on it
+            _outValue = CalculateOperation(_inValue, _thisVal);
+            _operation = OperationState.None;
+        }
+        else if (_thisVal != 0)
+        {
+            // No operation was between this number & the last number, so lose
+            manager.GameOver();
+        }
+        else
+        {
+            // Otherwise, no operations are performed and the out value is passed the in value
+            _outValue = _inValue;
+        }
+
         InvokeRepeating("FlowTick", startDelaySec, 0.075f);
-        
     }
 
     public virtual void FlowTick() {
-        Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | val: " + _value);
+        Debug.Log("flow pos: (" + xCord + ", " + yCord + ") | timer: " + timeTillFill + " | inVal: " + _inValue + " | op: " + _operation + "| thisVal: " + _thisVal + " | outVal: " + _outValue);
         float fracJourney = ((Time.time - flowStartTime) / maxTimeTillFill);
         //masks[0].transform.localScale = new Vector3(masks[0].transform.localScale.x,
         //                                        Mathf.Lerp(maskScale[0], 0.01f, fracJourney),
@@ -220,11 +244,12 @@ public class Tube : TubeData {
                     
                 }
 
-                
-                //If there is no tile or correct input side, end the game as our player has failed us (yet again).
+
+                //If there is no tile or correct input side, check if we've reached the end of the grid with the right number. if so, win
+                // else, end the game as our player has failed us (yet again).
                 if (valid == false) {
                     Debug.Log("Game sucks.");
-                    if (manager.CheckWinState(xCord, yCord, flowOut.Direction, _value))
+                    if (manager.CheckWinState(xCord, yCord, flowOut.Direction, _outValue))
                     {
                         manager.GameWin();
                     } else
@@ -233,12 +258,33 @@ public class Tube : TubeData {
                     }
                 } else {
                     //start the flow on that tile if a proper input/both side is connected. (Out=North, then In=South, etc.)
-                    nextTube.FlowStart(flowTo, _value); 
+                    nextTube.FlowStart(flowTo, _outValue, _operation); 
                     done = true;
                 }
 
 
             }
+        }
+    }
+
+    private int CalculateOperation(int v1, int v2)
+    {
+        switch (_operation)
+        {
+            case OperationState.Addition:
+                return v1 + v2;
+
+            case OperationState.Subtraction:
+                return v1 - v2;
+
+            case OperationState.Multiplication:
+                return v1 * v2;
+
+            case OperationState.Division:
+                return v1 / v2;
+
+            default:
+                return 0;
         }
     }
 }

@@ -16,17 +16,25 @@ public class TubeData : MonoBehaviour {
     protected Camera _cam;
     [SerializeField]
     protected TubeSideData[] _sides;
-
-    protected AudioSource _audioSource;
+    [SerializeField]
+    protected AudioSource _pickupSound;
+    [SerializeField]
+    protected AudioSource _placeSound;
+    [SerializeField]
+    protected AudioSource _flowSound;
     public float tileSize = 1;
 
-    protected int _value;
+    protected int _inValue;
+    protected int _outValue;
+    [SerializeField]
+    protected int _thisVal;
+    [SerializeField]
+    protected OperationState _operation = OperationState.None;
     protected byte xCord;
     protected byte yCord;
 
     protected void Start()
     {
-        _audioSource = GetComponent<AudioSource>();
         _cam = Camera.main;
         _sides = new TubeSideData[4];
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
@@ -77,7 +85,7 @@ public class TubeData : MonoBehaviour {
         return true;
     }
 
-    public void SetValue(int value) { _value = value; }
+    public void SetValue(int value) { _thisVal = value; }
     public void SetCoordinates(byte x, byte y) {
         xCord = x;
         yCord = y;

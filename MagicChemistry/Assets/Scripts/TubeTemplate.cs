@@ -16,7 +16,6 @@ public class TubeTemplate : TubeData {
             Debug.Log("here?");
             GameObject newTube = Instantiate(tube, gameObject.transform.position, gameObject.transform.rotation);
             newTube.GetComponent<Tube>().SetManager(manager);
-            _audioSource.Play();
             copyCreated = true;
         }
         if (Input.GetMouseButtonUp(0) && copyCreated)
