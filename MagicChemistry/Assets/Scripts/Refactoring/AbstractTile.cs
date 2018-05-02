@@ -25,4 +25,5 @@ public abstract class AbstractTile : MonoBehaviour
     {
         return _Point;
     }
+
 }

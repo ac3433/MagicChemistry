@@ -73,6 +73,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4987911586380256}
+  - component: {fileID: 114677529970101700}
   m_Layer: 0
   m_Name: Pipe-Straight Operator +
   m_TagString: Pipe
@@ -163,6 +164,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114677529970101700
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1832869248753986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b01ced457f3614288d83887b80c3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dragSpeed: 1.01
+  _collider: {fileID: 61175374424826940}
 --- !u!114 &114706734461449744
 MonoBehaviour:
   m_ObjectHideFlags: 1

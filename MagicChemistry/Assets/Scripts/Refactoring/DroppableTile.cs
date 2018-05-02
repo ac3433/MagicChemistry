@@ -28,6 +28,9 @@ public class DroppableTile : MonoBehaviour, IDropHandler
         }
 
         Draggable.DraggedObject.transform.SetParent(transform);
-        //eventData.pointerDrag.transform.GetComponent<MouseInteraction>()
+
+        Draggable tube = eventData.pointerDrag.transform.GetComponent<Draggable>();
+        AbstractTile tubeData = gameObject.GetComponent<AbstractTile>();
+        tube.SetPoint(tubeData.GetPoint());
     }
 }

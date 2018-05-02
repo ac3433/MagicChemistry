@@ -17,12 +17,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private bool _lockDragging;
     private bool _lockCloning;
 
-
+    private AbstractTube data;
 
     void Start()
     {
         _lockRotation = true;
         _colliderStartSize = _collider.size;
+        data = GetComponent<AbstractTube>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -53,7 +54,17 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        
+        if(Input.GetMouseButtonUp(0))
+            if(!_lockRotation)
+            {
+                data.RotateClockwise();
+            }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            LevelManager_v2.Instance.RemoveTubeOnGrid(data.GetPoint());
+            DestroyObject(gameObject);
+        }
     }
 
     public void LockRotation()
@@ -78,6 +89,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void SetPoint(Point p)
     {
-
+        data.SetPoint(p);
     }
 }

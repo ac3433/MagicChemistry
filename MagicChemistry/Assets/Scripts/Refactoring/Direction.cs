@@ -52,4 +52,22 @@ public static class DirectionExtensions
                 return Direction.None;
         }
     }
+
+    public static Direction RotateClockwise(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.North:
+                return Direction.East;
+            case Direction.East:
+                return Direction.South;
+            case Direction.South:
+                return Direction.West;
+            case Direction.West:
+                return Direction.North;
+            default:
+                return Direction.None;
+
+        }
+    }
 }

@@ -36,6 +36,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4147856579538776}
+  - component: {fileID: 114462395683511708}
+  - component: {fileID: 114021147062797532}
   m_Layer: 0
   m_Name: Pipe-L General
   m_TagString: Pipe
@@ -125,6 +127,32 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114021147062797532
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1873736394141806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27959757cddcd34479f9bda46549cb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _holeLocations: 0100000004000000
+  _hoverSprite: {fileID: 1934390577589142}
+--- !u!114 &114462395683511708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1873736394141806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b01ced457f3614288d83887b80c3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dragSpeed: 1.01
+  _collider: {fileID: 61454871623467518}
 --- !u!212 &212178288304807336
 SpriteRenderer:
   m_ObjectHideFlags: 1

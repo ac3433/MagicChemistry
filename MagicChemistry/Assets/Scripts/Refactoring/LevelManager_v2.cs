@@ -222,4 +222,11 @@ public class LevelManager_v2 : MonoBehaviour {
         }
     }
 
+    public void RemoveTubeOnGrid(Point p)
+    {
+        if(p.ValidateCoordinate(_gridSize, _gridSize))
+        {
+            _gridTube[p.Y, p.X] = null;
+        }
+    }
 }
