@@ -1,52 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GeneralTubeData : AbstractTube
 {
     [SerializeField]
     private Direction[] _holeLocations = new Direction[2];
 
-    private AbstractTile _prevHole;
-    private AbstractTile _nextHole;
+    protected AbstractTube _prevHole;
+    protected AbstractTube _nextHole;
 
-    [SerializeField]
-    private GameObject _hoverSprite;
+    protected Dictionary<Direction, AbstractTube> _holeDict;
 
-    private Dictionary<Direction, AbstractTile> _holeDict;
-
-    private int value;
+    protected Operation toBeOperatated { get; set; }
 
     private void Start()
     {
-        _holeDict = new Dictionary<Direction, AbstractTile>();
+        _holeDict = new Dictionary<Direction, AbstractTube>();
         //will be reassign upon connecting
         _holeDict.Add(_holeLocations[0], _prevHole);
         _holeDict.Add(_holeLocations[1], _nextHole);
 
-        value = 0;
-
+        Value = 0;
+        Replacable = true;
     }
 
-    private void OnMouseOver()
+    //mainly for operation
+    public override bool Valid()
     {
-        if(_hoverSprite != null)
-        {
-            _hoverSprite.SetActive(true);
-        }
-    }
-
-    private void OnMouseExit()
-    {
-        if (_hoverSprite != null)
-        {
-            _hoverSprite.SetActive(false);
-        }
-    }
-
-    public override bool Validation()
-    {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     public override void RotateClockwise()
@@ -57,18 +40,57 @@ public class GeneralTubeData : AbstractTube
             _holeLocations[i] = DirectionExtensions.RotateClockwise(_holeLocations[i]);
         }
 
-        Dictionary<Direction, AbstractTile> temp = new Dictionary<Direction, AbstractTile>();
+        Dictionary<Direction, AbstractTube> temp = new Dictionary<Direction, AbstractTube>();
 
         foreach (Direction dir in _holeDict.Keys)
         {
             temp.Add(DirectionExtensions.RotateClockwise(dir), _holeDict[dir]);
+            //Debug.Log(string.Format("Dir: {0} => {1}", dir, DirectionExtensions.RotateClockwise(dir)));
         }
 
         _holeDict = temp;
     }
 
-    public override void CheckSurrounding()
+    //public override void CheckSurrounding()
+    //{
+    //    foreach(Direction hole in _holeLocations)
+    //    {
+    //        Point targetPoint = GetPoint().AddPoint(DirectionExtensions.GetDirectionPoint(hole));
+
+    //        GameObject obj = LevelManager_v2.Instance.GetTubePositioning(targetPoint);
+
+    //        if(obj != null)
+    //        {
+    //            AbstractTube connectingTube = 
+    //        }
+
+    //    }
+    //}
+
+    public void AddConnectingTube(AbstractTube obj, Direction dirComingFrom)
     {
-        throw new System.NotImplementedException();
+        if(_holeDict.ContainsKey(dirComingFrom))
+        {
+            if(_holeDict[dirComingFrom].Equals(_prevHole))
+            {
+                _prevHole = obj;
+            }
+            else if (_holeDict[dirComingFrom].Equals(_nextHole))
+            {
+                _nextHole = obj;
+            }
+        }
+    }
+
+    public override Direction Flow(Direction comingFrom, int value)
+    {
+        Value = value;
+
+        List<Direction> remainingSpot = _holeDict.Keys.ToList();
+
+        remainingSpot.Remove(DirectionExtensions.GetOppositeDirection(comingFrom));
+
+        return remainingSpot[0];
+
     }
 }

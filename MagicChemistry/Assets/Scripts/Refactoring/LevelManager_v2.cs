@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public struct TubeFlowPlacement
 {
     public GameObject TubePrefab;
-    public Point Point;
+    public int X;
+    public int Y;
     public int Number;
 }
 
@@ -61,6 +63,9 @@ public class LevelManager_v2 : MonoBehaviour {
     [SerializeField]
     private GameObject _droppableTilePrefab;
 
+
+
+
     private Point _start;
     private Point _end;
 
@@ -72,6 +77,15 @@ public class LevelManager_v2 : MonoBehaviour {
     //mirror grid
     private GameObject[,] _gridTube;
 
+    private int StartNumber = 4;
+    [SerializeField]
+    private GameObject _startTilePrefab;
+    [SerializeField]
+    private Canvas can;
+
+    private Text countdown;
+    [SerializeField]
+    private int startingCountdownNumber;
     #endregion
 
     #region Flow Tube 
@@ -91,23 +105,61 @@ public class LevelManager_v2 : MonoBehaviour {
     private GameObject[] _operationPrefabs;
     #endregion
 
+
+    private IEnumerator countdownCoroutine;
+
     void Start () {
         //top left of the grid
         _start = new Point() { X = 0, Y = 0 };
         //bottom right of the grid
         _end = new Point() { X = _gridSize - 1, Y = _gridSize - 1 };
 
+        _gridDroppableTile = new GameObject[_gridSize, _gridSize];
+        _gridTube = new GameObject[_gridSize, _gridSize];
+
         InitalizeGridTile();
+        InitializedFixedTube();
         InitalizeGeneralTube();
         InitializeOperatorTube();
+        StartCountdown();
+
     }
 
     public float TileSize() { return _droppableTilePrefab.GetComponent<SpriteRenderer>().sprite.bounds.size.x; }
 
+    private void StartCountdown()
+    {
+        Transform canvasChild = can.transform.Find("FlowStart");
+        Transform canvasChildNumber = can.transform.Find("Startnumber");
+        canvasChildNumber.GetComponent<Text>().text = StartNumber.ToString();
+        countdown = canvasChild.GetComponent<Text>();
+        countdownCoroutine = Countdown();
+    }
+
+    private void InitializedFixedTube()
+    {
+        GenerateFixedTube();
+    }
+
+    private void GenerateFixedTube()
+    {
+        foreach(TubeFlowPlacement tube in _tubeFlowPlacement)
+        {
+            GameObject fixedTube = Instantiate(tube.TubePrefab);
+            fixedTube.transform.parent = _startGridPosition.transform;
+            fixedTube.transform.position = new Vector3(_startGridPosition.transform.position.x + TileSize() * tube.X, _startGridPosition.transform.position.y - (TileSize() * tube.Y), 0f);
+
+            GeneralTubeFixedData fix = fixedTube.GetComponent<GeneralTubeFixedData>();
+            fix.SetPoint(tube.X,tube.Y);
+            fix.SetNumber(tube.Number);
+            PlaceGameobjectOnGrid(tube.X, tube.Y, _gridDroppableTile, fixedTube);
+            PlaceTubeOnGrid(fixedTube, fix.GetPoint());
+        }
+    }
+
     private void InitalizeGridTile()
     {
-        _gridDroppableTile = new GameObject[_gridSize, _gridSize];
-
+        
         GenerateDroppableTile();
     }
 
@@ -119,6 +171,20 @@ public class LevelManager_v2 : MonoBehaviour {
             {
                 if(_gridDroppableTile[y,x] == null)
                 {
+                    if(y == 0 && x == 0)
+                    {
+                        GameObject s = Instantiate(_startTilePrefab);
+                        s.transform.parent = _startGridPosition.transform;
+                        s.transform.position = new Vector3(_startGridPosition.transform.position.x + TileSize() * x, _startGridPosition.transform.position.y - (TileSize() * y), 0f);
+                        s.name = string.Format("Tile {0}x{1}", x, y);
+                        DroppableTileData tileDatas = s.GetComponent<DroppableTileData>();
+                        if (tileDatas != null)
+                        {
+                            tileDatas.SetPoint(x, y);
+                        }
+                        continue;
+                    }
+
                     GameObject tile = Instantiate(_droppableTilePrefab);
                     tile.transform.parent = _startGridPosition.transform;
                     tile.transform.position = new Vector3(_startGridPosition.transform.position.x + TileSize() * x, _startGridPosition.transform.position.y - (TileSize() * y), 0f);
@@ -139,8 +205,6 @@ public class LevelManager_v2 : MonoBehaviour {
 
     private void InitalizeGeneralTube()
     {
-        _gridTube = new GameObject[_gridSize, _gridSize];
-
         GenerateGeneralTube();
     }
 
@@ -228,5 +292,53 @@ public class LevelManager_v2 : MonoBehaviour {
         {
             _gridTube[p.Y, p.X] = null;
         }
+    }
+
+
+    private void StartFlow()
+    {
+        if (_gridTube[0, 0] == null)
+        {
+            EndGame();
+        }
+
+        GameObject obj = _gridTube[0,0];
+
+        while(obj != null)
+        {
+            AbstractTube t = obj.GetComponent<AbstractTube>();
+            if (t != null)
+            {
+                
+            }
+            else
+                EndGame();
+        }
+
+    }
+
+    public void EndGame()
+    {
+
+    }
+
+    public void CheckWinCondition()
+    {
+
+    }
+
+    public IEnumerator Countdown()
+    {
+        if (startingCountdownNumber >= 0)
+        {
+            countdown.text = string.Format("Flow Starting in {0}s", startingCountdownNumber);
+            startingCountdownNumber--;
+        }
+        else
+        {
+            countdown.text = "";
+        }
+
+        yield return new WaitForSeconds(1);
     }
 }

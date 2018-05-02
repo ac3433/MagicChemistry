@@ -3,9 +3,14 @@ using System.Collections;
 
 public abstract class AbstractTube : AbstractTile
 {
+    public int Value { get; protected set; }
+
+    public bool Replacable { get; protected set; }
+
     public abstract void RotateClockwise();
 
-    public abstract bool Validation();
+    public abstract bool Valid();
 
-    public abstract void CheckSurrounding();
+    public abstract Direction Flow(Direction comingFrom, int value);
+
 }

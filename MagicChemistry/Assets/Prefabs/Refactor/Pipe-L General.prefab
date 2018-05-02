@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4304012490259154}
   - component: {fileID: 212178288304807336}
   - component: {fileID: 61454871623467518}
+  - component: {fileID: 114118292544060622}
   m_Layer: 0
   m_Name: Pipe-L-General
   m_TagString: Untagged
@@ -139,6 +140,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _holeLocations: 0100000004000000
+--- !u!114 &114118292544060622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1488621011536316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75258edb88bc1404e8e5e6405eb85e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _hoverSprite: {fileID: 1934390577589142}
 --- !u!114 &114462395683511708
 MonoBehaviour:
@@ -186,7 +198,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: a3525e28d2a4d184ebd792405095f5b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -230,7 +242,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: cd38343090766f944bf18cb66d50fcd5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

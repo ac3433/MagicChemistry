@@ -39,6 +39,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4460975542333670}
   - component: {fileID: 114041816043221108}
+  - component: {fileID: 114085971017463078}
   m_Layer: 0
   m_Name: Pipe-L Operator Divide
   m_TagString: Operator
@@ -91,6 +92,7 @@ GameObject:
   - component: {fileID: 212744260299355582}
   - component: {fileID: 61660677727503124}
   - component: {fileID: 222611651001224734}
+  - component: {fileID: 114032785739354756}
   m_Layer: 0
   m_Name: Pipe-L-General
   m_TagString: Untagged
@@ -152,6 +154,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114032785739354756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1652175130932270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75258edb88bc1404e8e5e6405eb85e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverSprite: {fileID: 1372617501869962}
 --- !u!114 &114041816043221108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,6 +179,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dragSpeed: 1.01
   _collider: {fileID: 61660677727503124}
+--- !u!114 &114085971017463078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1113351288769922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fa9a0e1923119843a1e1f4df812cbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _holeLocations: 0100000004000000
+  _operationType: 2
 --- !u!114 &114227502774927392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -281,7 +308,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: cd38343090766f944bf18cb66d50fcd5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -325,7 +352,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: a3525e28d2a4d184ebd792405095f5b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

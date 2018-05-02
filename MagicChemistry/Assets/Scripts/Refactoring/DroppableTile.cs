@@ -13,7 +13,7 @@ public class DroppableTile : MonoBehaviour, IDropHandler
             {
                 foreach (Transform child in transform)
                 {
-                    if (string.Equals(child.tag, "Tube"))
+                    if (string.Equals(child.tag, "Pipe") || string.Equals(child.tag, "Operator"))
                         return child.gameObject;
                 }
             }
@@ -27,10 +27,12 @@ public class DroppableTile : MonoBehaviour, IDropHandler
             DestroyObject(Tube);
         }
 
+
         Draggable.DraggedObject.transform.SetParent(transform);
 
         Draggable tube = eventData.pointerDrag.transform.GetComponent<Draggable>();
         AbstractTile tubeData = gameObject.GetComponent<AbstractTile>();
+
         tube.SetPoint(tubeData.GetPoint());
     }
 }

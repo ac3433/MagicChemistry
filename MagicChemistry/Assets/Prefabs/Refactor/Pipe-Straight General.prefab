@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4068914255206010}
   - component: {fileID: 114755000597295182}
+  - component: {fileID: 114016919697772996}
   m_Layer: 0
   m_Name: Pipe-Straight General
   m_TagString: Pipe
@@ -53,6 +54,7 @@ GameObject:
   - component: {fileID: 4663531728982402}
   - component: {fileID: 212982005885407326}
   - component: {fileID: 61221846011355058}
+  - component: {fileID: 114275869233581262}
   m_Layer: 0
   m_Name: Pipe-Straight-v2-01
   m_TagString: Untagged
@@ -126,6 +128,30 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114016919697772996
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1191709621125352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27959757cddcd34479f9bda46549cb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _holeLocations: 0100000002000000
+--- !u!114 &114275869233581262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1625804582399608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75258edb88bc1404e8e5e6405eb85e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverSprite: {fileID: 1579053726032518}
 --- !u!114 &114755000597295182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,7 +198,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 1119d1ad2f2ea29488cac24ec061fbc6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -216,7 +242,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: bf09388547aac174ba64af0f5587e6a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

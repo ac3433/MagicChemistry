@@ -13,6 +13,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     [SerializeField]
     private BoxCollider2D _collider;
     private Vector2 _colliderStartSize;
+    private Vector3 _startPositon;
+    private Transform _startParent;
+
     private bool _lockRotation;
     private bool _lockDragging;
     private bool _lockCloning;
@@ -37,6 +40,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         }
         DraggedObject = gameObject;
         _collider.size = Vector2.zero;
+        _startPositon = transform.position;
+        _startParent = transform.parent;
+        LevelManager_v2.Instance.RemoveTubeOnGrid(data.GetPoint());
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -46,10 +52,20 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.localPosition = Vector3.zero;
+        if(data.Replacable && data.Valid())
+        {
+            transform.localPosition = Vector3.zero;
+            
+            LockCloning();
+            UnlockRotation();
+        }
+        else
+        {
+            transform.SetParent(_startParent);
+            transform.position = _startPositon;
+        }
+        LevelManager_v2.Instance.PlaceTubeOnGrid(gameObject, data.GetPoint());
         _collider.size = _colliderStartSize;
-        LockCloning();
-        UnlockRotation();
     }
 
     public void OnPointerClick(PointerEventData eventData)

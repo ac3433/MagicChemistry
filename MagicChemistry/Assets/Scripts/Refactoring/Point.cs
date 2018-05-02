@@ -17,5 +17,10 @@
 
         return true;
     }
+
+    public Point AddPoint(Point p2)
+    {
+        return new Point() { X = X + p2.X, Y = Y + p2.Y };
+    }
 }
 
