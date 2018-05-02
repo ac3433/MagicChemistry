@@ -7,6 +7,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     //Considering that only one object at any point of time will be dragged.
     //This make sense to use a static accesor
     public static GameObject DraggedObject;
+    public AudioClip pickupSound;
+    public AudioClip putDownSound;
+    private AudioSource _audioSource;
 
     [SerializeField]
     private float _dragSpeed = 1.01f;
@@ -24,6 +27,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     void Start()
     {
+        _audioSource = gameObject.AddComponent<AudioSource>();
         _lockRotation = true;
         _colliderStartSize = _collider.size;
         data = GetComponent<AbstractTube>();
@@ -43,6 +47,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         _startPositon = transform.position;
         _startParent = transform.parent;
         LevelManager_v2.Instance.RemoveTubeOnGrid(data.GetPoint());
+        _audioSource.clip = pickupSound;
+        _audioSource.Play();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -66,6 +72,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         }
         LevelManager_v2.Instance.PlaceTubeOnGrid(gameObject, data.GetPoint());
         _collider.size = _colliderStartSize;
+        _audioSource.clip = putDownSound;
+        _audioSource.Play();
     }
 
     public void OnPointerClick(PointerEventData eventData)

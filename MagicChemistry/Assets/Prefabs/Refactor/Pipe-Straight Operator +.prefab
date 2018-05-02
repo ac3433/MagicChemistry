@@ -202,6 +202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b01ced457f3614288d83887b80c3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupSound: {fileID: 8300000, guid: 39e3e9fea21ea7948aedec970784095a, type: 3}
+  putDownSound: {fileID: 8300000, guid: 5f574f1909753c840a8c6e83c90dd3dd, type: 3}
   _dragSpeed: 1.01
   _collider: {fileID: 61175374424826940}
 --- !u!114 &114706734461449744
