@@ -115,14 +115,14 @@ MonoBehaviour:
   _South: 2
   _West: 3
   _East: 3
-  _pickupSound: {fileID: 82744632542019094, guid: 670caec0158a58b4299f2e1ff58716cf,
-    type: 2}
-  _placeSound: {fileID: 82186210086253502, guid: 670caec0158a58b4299f2e1ff58716cf,
-    type: 2}
-  _flowSound: {fileID: 82827401959474764, guid: 670caec0158a58b4299f2e1ff58716cf,
-    type: 2}
+  flowSound: {fileID: 8300000, guid: 52d36883c72c4ac41952a2d5ac9a26c1, type: 3}
+  pickupSound: {fileID: 8300000, guid: 39e3e9fea21ea7948aedec970784095a, type: 3}
+  putDownSound: {fileID: 8300000, guid: 5f574f1909753c840a8c6e83c90dd3dd, type: 3}
   tileSize: 1
+  _thisVal: 0
+  _operation: 4
   manager: {fileID: 0}
+  numberText: {fileID: 0}
   gridTile: {fileID: 0}
   masks: []
   startDelaySec: 0

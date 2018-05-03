@@ -46,6 +46,9 @@ public class LevelManager : MonoBehaviour {
     public Text flowTimer;
     public Text outputText;
     public Text inputText;
+    public Text currentOutText;
+    public int currentOut;
+    
 
     [SerializeField]
     private List<GridPlacement> _specialTile;
@@ -58,6 +61,7 @@ public class LevelManager : MonoBehaviour {
     private GameObject[,] _grid;
 
 	void Start () {
+        currentOut = _startValue;
         outputText.text = _flowEndVal.ToString();
         inputText.text = _startValue.ToString();
 		if(_tile == null)
@@ -84,6 +88,7 @@ public class LevelManager : MonoBehaviour {
             timeBeforeFlowStarts -= Time.deltaTime;
             flowTimer.text = "Start in: " + Mathf.Round(timeBeforeFlowStarts).ToString();
         }
+        currentOutText.text = "Current value: " + currentOut;
     }
 
     private void Flow(int x, int y, DirectionState dir, int val)
@@ -198,11 +203,18 @@ public class LevelManager : MonoBehaviour {
     public void GameOver()
     {
         Debug.Log("Lose");
-        SceneManager.LoadScene("Level_1");
+        SceneManager.LoadScene("GameOver");
     }
 
     public void GameWin()
     {
         Debug.Log("Win");
+        if (SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCount)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        } else
+        {
+            SceneManager.LoadScene("GameWin");
+        }
     }
 }

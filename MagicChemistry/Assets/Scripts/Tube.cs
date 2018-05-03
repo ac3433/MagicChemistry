@@ -31,7 +31,8 @@ public class Tube : TubeData {
         for(int i = 0; i < masks.Length; i++) {
             maskScale[i] = masks[i].transform.localScale.y;
         }
-        _pickupSound.Play();
+        _audioSource.clip = pickupSound;
+        _audioSource.Play();
     }
 
     public void SetManager(LevelManager manager)
@@ -57,7 +58,8 @@ public class Tube : TubeData {
                 // Place the tube
                 _placed = true;
                 SnapToTile();
-                _placeSound.Play();
+                _audioSource.clip = putDownSound;
+                _audioSource.Play();
             } 
         }
         if (Input.GetMouseButtonDown(0) && _placed && !flowing)
@@ -149,7 +151,8 @@ public class Tube : TubeData {
     }
 
     public virtual void FlowStart(DirectionState inFlowSide, int inVal, OperationState operation) {
-        _flowSound.Play();
+        _audioSource.clip = flowSound;
+        _audioSource.Play();
         _inValue = inVal;
         if (_operation == OperationState.None)
         {
@@ -176,6 +179,7 @@ public class Tube : TubeData {
             // Otherwise, no operations are performed and the out value is passed the in value
             _outValue = _inValue;
         }
+        manager.currentOut = _outValue;
 
         InvokeRepeating("FlowTick", startDelaySec, 0.075f);
     }

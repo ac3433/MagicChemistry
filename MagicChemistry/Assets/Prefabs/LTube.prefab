@@ -52,7 +52,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4371640998498686}
   - component: {fileID: 114276294137981104}
-  - component: {fileID: 82706888000396272}
   m_Layer: 8
   m_Name: LTube
   m_TagString: Untagged
@@ -101,86 +100,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &82706888000396272
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1901561023261362}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5f574f1909753c840a8c6e83c90dd3dd, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
 --- !u!114 &114276294137981104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -196,12 +115,9 @@ MonoBehaviour:
   _South: 3
   _West: 3
   _East: 2
-  _pickupSound: {fileID: 82744632542019094, guid: 670caec0158a58b4299f2e1ff58716cf,
-    type: 2}
-  _placeSound: {fileID: 82186210086253502, guid: 670caec0158a58b4299f2e1ff58716cf,
-    type: 2}
-  _flowSound: {fileID: 82827401959474764, guid: 670caec0158a58b4299f2e1ff58716cf,
-    type: 2}
+  flowSound: {fileID: 8300000, guid: 52d36883c72c4ac41952a2d5ac9a26c1, type: 3}
+  pickupSound: {fileID: 8300000, guid: 39e3e9fea21ea7948aedec970784095a, type: 3}
+  putDownSound: {fileID: 8300000, guid: 5f574f1909753c840a8c6e83c90dd3dd, type: 3}
   tileSize: 1
   _thisVal: 0
   _operation: 4

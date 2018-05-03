@@ -16,13 +16,12 @@ public class TubeData : MonoBehaviour {
     protected Camera _cam;
     [SerializeField]
     protected TubeSideData[] _sides;
-    [SerializeField]
-    protected AudioSource _pickupSound;
-    [SerializeField]
-    protected AudioSource _placeSound;
-    [SerializeField]
-    protected AudioSource _flowSound;
+    public AudioClip flowSound;
+    public AudioClip pickupSound;
+    public AudioClip putDownSound;
+    protected AudioSource _audioSource;
     public float tileSize = 1;
+
 
     protected int _inValue;
     protected int _outValue;
@@ -35,6 +34,7 @@ public class TubeData : MonoBehaviour {
 
     protected void Start()
     {
+        _audioSource = gameObject.AddComponent<AudioSource>();
         _cam = Camera.main;
         _sides = new TubeSideData[4];
         _sides[0] = new TubeSideData() { Direction = DirectionState.North, State = _North };
