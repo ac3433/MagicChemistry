@@ -63,9 +63,6 @@ public class LevelManager_v2 : MonoBehaviour {
     [SerializeField]
     private GameObject _droppableTilePrefab;
 
-
-
-
     private Point _start;
     private Point _end;
 
@@ -77,15 +74,25 @@ public class LevelManager_v2 : MonoBehaviour {
     //mirror grid
     private GameObject[,] _gridTube;
 
+    [SerializeField]
     private int StartNumber = 4;
     [SerializeField]
     private GameObject _startTilePrefab;
     [SerializeField]
-    private Canvas can;
+    private Canvas startCanvas;
 
-    private Text countdown;
     [SerializeField]
-    private int startingCountdownNumber;
+    private int endNumber = 21;
+    [SerializeField]
+    private GameObject _endTilePrefab;
+    [SerializeField]
+    private Canvas canEnd;
+
+    private Text endNumberText;
+
+    private Text countdownText;
+    
+    public int startingCountdownNumber;
     #endregion
 
     #region Flow Tube 
@@ -106,8 +113,6 @@ public class LevelManager_v2 : MonoBehaviour {
     #endregion
 
 
-    private IEnumerator countdownCoroutine;
-
     void Start () {
         //top left of the grid
         _start = new Point() { X = 0, Y = 0 };
@@ -121,19 +126,32 @@ public class LevelManager_v2 : MonoBehaviour {
         InitializedFixedTube();
         InitalizeGeneralTube();
         InitializeOperatorTube();
+        InitalizeState();
+
         StartCountdown();
 
     }
 
     public float TileSize() { return _droppableTilePrefab.GetComponent<SpriteRenderer>().sprite.bounds.size.x; }
 
+    private void InitalizeState()
+    {
+        Transform startChildCountdownT = startCanvas.transform.Find("FlowStart");
+        Transform endChildNum = canEnd.transform.Find("EndNumber");
+        countdownText = startChildCountdownT.GetComponent<Text>();
+        endNumberText = endChildNum.GetComponent<Text>();
+        endNumberText.text = endNumber.ToString();
+    }
+
     private void StartCountdown()
     {
-        Transform canvasChild = can.transform.Find("FlowStart");
-        Transform canvasChildNumber = can.transform.Find("Startnumber");
+        Transform canvasChild = startCanvas.transform.Find("FlowStart");
+        Transform canvasChildNumber = startCanvas.transform.Find("Startnumber");
         canvasChildNumber.GetComponent<Text>().text = StartNumber.ToString();
-        countdown = canvasChild.GetComponent<Text>();
-        countdownCoroutine = Countdown();
+        countdownText = canvasChild.GetComponent<Text>();
+        Invoke("StartFlow", startingCountdownNumber);
+        StartCoroutine("Countdown");
+        
     }
 
     private void InitializedFixedTube()
@@ -174,6 +192,19 @@ public class LevelManager_v2 : MonoBehaviour {
                     if(y == 0 && x == 0)
                     {
                         GameObject s = Instantiate(_startTilePrefab);
+                        s.transform.parent = _startGridPosition.transform;
+                        s.transform.position = new Vector3(_startGridPosition.transform.position.x + TileSize() * x, _startGridPosition.transform.position.y - (TileSize() * y), 0f);
+                        s.name = string.Format("Tile {0}x{1}", x, y);
+                        DroppableTileData tileDatas = s.GetComponent<DroppableTileData>();
+                        if (tileDatas != null)
+                        {
+                            tileDatas.SetPoint(x, y);
+                        }
+                        continue;
+                    }
+                    else if (y == _gridSize -1 && x == _gridSize -1)
+                    {
+                        GameObject s = Instantiate(_endTilePrefab);
                         s.transform.parent = _startGridPosition.transform;
                         s.transform.position = new Vector3(_startGridPosition.transform.position.x + TileSize() * x, _startGridPosition.transform.position.y - (TileSize() * y), 0f);
                         s.name = string.Format("Tile {0}x{1}", x, y);
@@ -303,13 +334,62 @@ public class LevelManager_v2 : MonoBehaviour {
         }
 
         GameObject obj = _gridTube[0,0];
+        AbstractTube prev = null ;
+        Point start = new Point() { X = 0, Y = 0 };
+        Point end = new Point() { X = _gridSize -1, Y = _gridSize -1};
 
-        while(obj != null)
+        Direction goingTo = Direction.None;
+
+        while (obj != null)
         {
             AbstractTube t = obj.GetComponent<AbstractTube>();
+            
             if (t != null)
             {
-                
+                if (t.GetPoint().EqualPoint(start))
+                {
+                    if (t.Incoming(Direction.South))
+                    {
+                        //fill up flow here;
+
+                        goingTo = DirectionExtensions.GetOppositeDirection(t.Flow(Direction.South, StartNumber));
+
+                        Point nextPoint = t.GetPoint().AddPoint(DirectionExtensions.GetDirectionPoint(goingTo));
+
+                        if (_gridTube[nextPoint.Y, nextPoint.X] != null)
+                        {
+                            obj = _gridTube[nextPoint.Y, nextPoint.X];
+                            prev = t;
+                        }
+                        else
+                            EndGame();
+
+                    }
+                    else
+                        EndGame();
+                }
+                else if(t.GetPoint().EqualPoint(end))
+                {
+                    CheckWinCondition();
+                }
+                else
+                {
+                    if (t.Incoming(goingTo))
+                    {
+
+                        goingTo = DirectionExtensions.GetOppositeDirection(t.Flow(goingTo, prev.Value));
+                        Point nextPoint = t.GetPoint().AddPoint(DirectionExtensions.GetDirectionPoint(goingTo));
+                        if (_gridTube[nextPoint.Y, nextPoint.X] != null)
+                        {
+                            obj = _gridTube[nextPoint.Y, nextPoint.X];
+                            prev = t;
+                        }
+                        else
+                            EndGame();
+                    }
+                    else
+                        EndGame();
+                }
             }
             else
                 EndGame();
@@ -322,23 +402,38 @@ public class LevelManager_v2 : MonoBehaviour {
 
     }
 
-    public void CheckWinCondition()
+    public void WinGame()
     {
 
     }
 
+    public void CheckWinCondition()
+    {
+        if(_gridTube[_gridSize -1, _gridSize -1] != null)
+        {
+            GameObject e = _gridTube[_gridSize - 1, _gridSize - 1];
+            AbstractTube tuby = e.GetComponent<AbstractTube>();
+
+            if (endNumber == tuby.Value)
+                WinGame();
+            else
+                EndGame();
+        }
+    }
+
     public IEnumerator Countdown()
     {
-        if (startingCountdownNumber >= 0)
+        while (startingCountdownNumber >= 0)
         {
-            countdown.text = string.Format("Flow Starting in {0}s", startingCountdownNumber);
-            startingCountdownNumber--;
-        }
-        else
-        {
-            countdown.text = "";
-        }
 
-        yield return new WaitForSeconds(1);
+            countdownText.text = ("Flowing starts in " + startingCountdownNumber);
+            startingCountdownNumber--;
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    private void Update()
+    {
+       
     }
 }

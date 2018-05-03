@@ -82,6 +82,8 @@ public class GeneralTubeData : AbstractTube
         }
     }
 
+
+
     public override Direction Flow(Direction comingFrom, int value)
     {
         Value = value;
@@ -92,5 +94,17 @@ public class GeneralTubeData : AbstractTube
 
         return remainingSpot[0];
 
+    }
+
+    public override bool Incoming(Direction dir)
+    {
+        List<Direction> hole = _holeDict.Keys.ToList();
+
+        if (hole.Contains(DirectionExtensions.GetOppositeDirection(dir)))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

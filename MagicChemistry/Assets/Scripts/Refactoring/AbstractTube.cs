@@ -13,4 +13,6 @@ public abstract class AbstractTube : AbstractTile
 
     public abstract Direction Flow(Direction comingFrom, int value);
 
+    public abstract bool Incoming(Direction dir);
+
 }
