@@ -804,7 +804,7 @@ MonoBehaviour:
   _flowEndY: 4
   _flowEndDirection: 2
   _flowEndVal: 10
-  maxTimeBeforeFlowStarts: 10
+  maxTimeBeforeFlowStarts: 30
   flowTimer: {fileID: 1008326866}
   outputText: {fileID: 1804342427}
   inputText: {fileID: 1368563351}
