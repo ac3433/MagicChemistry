@@ -86,7 +86,8 @@ public class LevelManager : MonoBehaviour {
     public Text inputText;
     public Text currentOutText;
     public int currentOut;
-    
+
+    public AudioSource mainMusic;
 
     [SerializeField]
     private List<GridPlacement> _specialTile;
@@ -165,6 +166,7 @@ public class LevelManager : MonoBehaviour {
     {
         Debug.Log("Flow starting...");
         Flow(_flowStartX, _flowStartY, _flowStartDirection, _startValue);
+        mainMusic.Play();
     }
 
     public bool CheckWinState(int xCord, int yCord, DirectionState dir, float val)
@@ -253,12 +255,6 @@ public class LevelManager : MonoBehaviour {
     public void GameWin()
     {
         Debug.Log("Win");
-        if (SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCount)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        } else
-        {
-            SceneManager.LoadScene("GameWin");
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
