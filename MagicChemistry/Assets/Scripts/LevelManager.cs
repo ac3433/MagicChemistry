@@ -9,6 +9,7 @@ public struct GridPlacement
 {
     public int xCoordinate;
     public int yCoordinate;
+    public int value;
     [Tooltip("Select the sprite from the tile list")]
     public int spriteID;
 }
@@ -52,6 +53,7 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     private List<GridPlacement> _specialTile;
+
 
     [SerializeField]
     [Tooltip("It will create a perfect sqaure grid based on the number. Ex. 8 will create 8x8 grid.")]
@@ -137,7 +139,7 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
-    public float TileSize() { return _tile[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x; }
+    public float TileSize() { return _tile[0].GetComponentInChildren<SpriteRenderer>().sprite.bounds.size.x; }
 	
     private void CreateInteractableTile()
     {
@@ -146,6 +148,11 @@ public class LevelManager : MonoBehaviour {
         foreach (GridPlacement placement in _specialTile)
         {
             GameObject newObj = PlaceTile(placement.xCoordinate, placement.yCoordinate, placement.spriteID);
+            TubeData tube = newObj.GetComponent<TubeData>();
+            if (tube != null)
+            {
+                tube.SetValue(placement.value);
+            }
         }
 
         for (int y = 0; y < _gridSize; y++)
